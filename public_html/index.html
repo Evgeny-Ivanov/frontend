@@ -1,7 +1,7 @@
 <!DOCTYPE  html>
 <html><head>
     <meta charset="utf-8" />
-    <title><!-- TODO --></title>
+    <title>My Super Game</title>
     <link rel="stylesheet" href="/css/main.css" />
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -79,8 +79,10 @@
 
         function showScoreboardScreen() {
             console.log("showScoreboardScreen");
+
             hideMainScreen();
             $page.html(scoreboardTmpl());
+
             $page.find('.back-in-main-menu').on('click',showMainScreen);
         }
         function hideScoreboardScreen() {
@@ -89,8 +91,10 @@
 
         function showGameScreen() {
             console.log("showGameScreen");
+
             hideMainScreen();
             $page.html(gameTmpl());
+
             $page.find('.back-in-main-menu').on('click',showMainScreen);
         }
         function hideGameScreen() {
@@ -121,6 +125,7 @@
             // Удаляем установленные обработчики событий
             $page.find('.js-scoreboard').off('click', showScoreboardScreen);
             $page.find('.js-start-game').off('click', showGameScreen);
+            $page.find('.js-login').on('click',showLoginScreen);
         }
 
         console.log("start");
