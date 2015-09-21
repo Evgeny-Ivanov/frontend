@@ -29,7 +29,6 @@ define([
             mainView.show();
         },
         scoreboardAction: function () {
-            alert("Scoreboard");
         	$("#page").append(scoreboardView.el);
             scoreboardView.show();
         },
