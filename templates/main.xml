@@ -1,5 +1,4 @@
-
-<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+<fest:template xmlns:fest="http://fest.mail.ru">
 
     <div class = "row">
 
@@ -9,7 +8,7 @@
             <ul class="nav nav-pills nav-stacked ">
             	<li>  <h1> Main menu </h1>  </li>
                 <li> <a href="#game" class="js-start-game">Play</a> </li>            	
-                <li> <a href="#scoreboard" class="js-scoreboard">Score Board</a> </li>
+                <li> <a href="#scoreBoard" class="js-scoreboard">Score Board</a> </li>
                 <li> <a href="#login" class="js-login">Login</a> </li>
             </ul>
         </div>
@@ -17,6 +16,5 @@
         <div class="col-md-4"></div>
 
     </div>
-
 
 </fest:template>

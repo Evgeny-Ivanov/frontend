@@ -14,15 +14,14 @@ module.exports = function (grunt) {
             templates: {
                 files: [{
                     expand: true,
-
-                    cwd: 'templates',/* исходная директория */
-                    src: '*.xml',/* имена шаблонов */
-                    dest: 'public_html/js/tmpl'/* результирующая директория */
+                    cwd: 'templates', /* исходная директория */
+                    src: '*.xml', /* имена шаблонов */
+                    dest: 'public_html/js/tmpl' /* результирующая директория */
                 }],
                 options: {
                     template: function (data) {/* формат функции-шаблона */
                         return grunt.template.process(/* присваиваем функцию-шаблон переменной */
-                            'define(function () { return <%= contents %> ; });',
+                            'var <%= name %>Tmpl = <%= contents %> ;',
                             {data: data}
                         );
                     }
@@ -51,7 +50,6 @@ module.exports = function (grunt) {
         concurrent: {
             target: ['watch', 'shell'],
             options: {
-
                 logConcurrentOutput: true /* Вывод процесса */
             }
         },
@@ -63,14 +61,7 @@ module.exports = function (grunt) {
             },
 
             // при запуске этой задачи анализируется файл Gruntfile.js и все JS-файлы в src
-            build: [
-                'Gruntfile.js', 
-                'public_html/js/*.js',
-                'public_html/js/views/*.js',
-                'public_html/js/collections/*.js',
-                'public_html/js/models/*.js'
-            ]
-
+            build: ['Gruntfile.js', 'public_html/js/tmpl/**/*.js']
         }
     });
 
@@ -78,9 +69,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-fest');
-
     grunt.loadNpmTasks('grunt-contrib-jshint');
-
 
     grunt.registerTask('default', ['concurrent']);
 
