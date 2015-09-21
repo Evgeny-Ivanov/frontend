@@ -23,7 +23,6 @@ module.exports = function (grunt) {
                     template: function (data) {/* формат функции-шаблона */
                         return grunt.template.process(/* присваиваем функцию-шаблон переменной */
                             'define(function () { return <%= contents %> ; });',
-
                             {data: data}
                         );
                     }
@@ -64,7 +63,13 @@ module.exports = function (grunt) {
             },
 
             // при запуске этой задачи анализируется файл Gruntfile.js и все JS-файлы в src
-            build: ['Gruntfile.js', 'public_html/js/tmpl/**/*.js']
+            build: [
+                'Gruntfile.js', 
+                'public_html/js/*.js',
+                'public_html/js/views/*.js',
+                'public_html/js/collections/*.js',
+                'public_html/js/models/*.js'
+            ]
 
         }
     });

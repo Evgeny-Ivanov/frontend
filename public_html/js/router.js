@@ -1,27 +1,44 @@
 define([
-    'backbone'
+    'backbone',
+    'views/main',
+    'views/game',
+    'views/login',
+    'views/scoreboard'
+
 ], function(
-    Backbone
+    Backbone,
+    mainView,
+    gameView,
+    loginView,
+    scoreboardView
 ){
 
+
+
     var Router = Backbone.Router.extend({
+
         routes: {
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
             'login': 'loginAction',
             '*default': 'defaultActions'
         },
+
         defaultActions: function () {
-            // TODO
+        	$("#page").append(mainView.el);
+            mainView.show();
         },
         scoreboardAction: function () {
-            // TODO
+        	$("#page").append(scoreboardView.el);
+            scoreboardView.show();
         },
         gameAction: function () {
-            // TODO
+        	$("#page").append(gameView.el);
+            gameView.show();
         },
         loginAction: function () {
-            // TODO
+        	$("#page").append(loginView.el);
+            loginView.show();
         }
     });
 
