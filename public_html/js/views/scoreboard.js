@@ -15,14 +15,14 @@ define([
         id:'scoreboardView',
         template: tmpl,
         events: {
-            "click ":"hide",
+            'click .back-in-main-menu': 'hide'
         },
         initialize: function () {
             this.$el.html(this.template());
 
             var self = this;             
             collectionsScores.forEach(function(num){
-                self.$el.append('<h1>'+num.get('name')+' : '+num.get('score')+'</h1/><p>');
+                self.$el.find('.players').append('<li>'+num.get('name')+' : '+num.get('score')+'</li>');
             });
         },
         render: function () {
@@ -33,6 +33,7 @@ define([
         },
         hide: function () {
             this.$el.hide();
+            Backbone.history.navigate('', { trigger: true });
         }
 
     });

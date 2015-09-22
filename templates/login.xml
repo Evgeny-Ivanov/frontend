@@ -8,7 +8,7 @@
 
         <div class="col-md-4 center">
 
-			<form class="form-horizontal" role="form" metod = "POST" action="javascript:void(null);" onsubmit="ajaxAuthorization()">
+			<form class="form-horizontal" role="form" metod = "POST" action="javascript:void(null);">
 			<!--Событие onsubmit возникает при отправке формы
                 Оператор void вычисляет выражение и возвращает undefined.
 		    -->	

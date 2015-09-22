@@ -5,6 +5,9 @@
 
         <div class="col-md-4 center">
         	<h1>Scoreboard</h1>
+            <ul class='players'>
+                <!-- сюда будут вставляться игроки с помощью jQuery -->
+            </ul>
         </div>
 
         <div class="col-md-4"></div>
