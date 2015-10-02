@@ -1,0 +1,11 @@
+/*input:required{
+
+    border: 1px solid red; /* Красная рамка для обязательных полей 
+
+} */
+
+
+ /*input[type="email"]:invalid{ color: red;} */
+ /* input[type="email"]:valid { color: green;} */
+
+ 

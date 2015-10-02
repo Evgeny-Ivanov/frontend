@@ -11,7 +11,8 @@ define([
         template: tmpl,
         events: {
             'click .back-in-main-menu': 'hide',
-            'click .ajax-signin': 'ajaxAuthorization'
+            'submit .ajax-signin': 'ajaxAuthorization',
+            'input .ajax-signin__input-email': 'isValidityEmail'
         },
 
         initialize: function () {
@@ -38,7 +39,16 @@ define([
                            console.log("ajax error");
                         },
                 success : function(answer){
-                            console.log("ajax success");
+                            if(answer == "OK"){
+                                console.log("ajax success");
+                                Backbone.history.navigate('', { trigger: true });
+                            }
+                            else{
+                                var $error = $(".form-horizontal__error-panel"); 
+                                $error.append(answer);
+                                $error.show();
+                            }
+
                           }
             };
             var password = $("#inputPassword3").val();
@@ -46,9 +56,18 @@ define([
             console.log('email = '+email);
             setting.data = {"email": email,"password":password};
             $.ajax(setting);
-        }
+        },
+        isValidityEmail: function(event){
 
-    });
+            if (event.target.validity.valid) {
+                $('.ajax-signin__success-logo').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
+                $('.ajax-signin__input-email').removeClass('has-error').addClass('has-success');
+            } else {
+                $('.ajax-signin__success-logo').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
+                $('.ajax-signin__input-email').removeClass('has-success').addClass('has-error');
+            }
+
+        }});
 
     return new View();
 });

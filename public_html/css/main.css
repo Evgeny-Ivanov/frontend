@@ -1,1 +1,18 @@
-/* TODO */
+.ajax-signin__error-panel{
+    display: none;
+}
+
+.ajax-signin__success-logo{
+	display: none;
+}
+
+.ajax-signin__input-email{
+	
+}
+
+
+body {
+   /* background-color: #69b241;*/
+}
+
+

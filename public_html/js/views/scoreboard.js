@@ -22,7 +22,7 @@ define([
 
             var self = this;             
             collectionsScores.forEach(function(num){
-                self.$el.find('.players').append('<li>'+num.get('name')+' : '+num.get('score')+'</li>');
+            self.$el.find('.players').append('<li class = "players__player">'+num.get('name')+' : '+num.get('score')+'</li>');
             });
         },
         render: function () {
