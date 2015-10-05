@@ -1,9 +1,11 @@
 define([
     'backbone',
-    'tmpl/login'
+    'tmpl/login',
+    'router'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    router
 ){
 
     var View = Backbone.View.extend({
@@ -19,14 +21,12 @@ define([
             this.$el.html(this.template());
         },
         render: function () {
-            // TODO
         },
         show: function () {
             this.$el.show();
         },
         hide: function () {
-            this.$el.hide();
-            Backbone.history.navigate('', { trigger: true });
+            this.$el.detach();
         },
         ajaxAuthorization: function(){
 
@@ -59,12 +59,14 @@ define([
         },
         isValidityEmail: function(event){
 
+            var valEmail = this.$el.find('.ajax-signin #inputEmail3').val();
+            console.dir(valEmail);
             if (event.target.validity.valid) {
-                $('.ajax-signin__success-logo').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
-                $('.ajax-signin__input-email').removeClass('has-error').addClass('has-success');
+                this.$el.find('.ajax-signin__success-logo').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
+                this.$el.find('.ajax-signin__input-email').removeClass('has-error').addClass('has-success');
             } else {
-                $('.ajax-signin__success-logo').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
-                $('.ajax-signin__input-email').removeClass('has-success').addClass('has-error');
+                this.$el.find('.ajax-signin__success-logo').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
+                this.$el.find('.ajax-signin__input-email').removeClass('has-success').addClass('has-error');
             }
 
         }});

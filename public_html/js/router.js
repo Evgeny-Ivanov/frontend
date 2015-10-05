@@ -16,28 +16,31 @@ define([
 
 
     var Router = Backbone.Router.extend({
-
         routes: {
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
             'login': 'loginAction',
             '*default': 'defaultActions'
         },
-
+        $el: $("#page"),//для удобства
         defaultActions: function () {
-        	$("#page").append(mainView.el);
+            this.$el.empty();
+        	this.$el.append(mainView.el);
             mainView.show();
         },
         scoreboardAction: function () {
-        	$("#page").append(scoreboardView.el);
+            this.$el.empty();
+        	this.$el.append(scoreboardView.el);
             scoreboardView.show();
         },
         gameAction: function () {
-        	$("#page").append(gameView.el);
+            this.$el.empty();
+        	this.$el.append(gameView.el);
             gameView.show();
         },
         loginAction: function () {
-        	$("#page").append(loginView.el);
+            this.$el.empty();
+        	this.$el.append(loginView.el);
             loginView.show();
         }
     });

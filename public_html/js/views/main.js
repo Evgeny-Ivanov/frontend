@@ -23,8 +23,7 @@ define([
             $(this.el).show();
         },
         hide: function () {
-            //this.remove();
-            this.$el.hide();
+            this.$el.detach();
         }
 
 

@@ -7,30 +7,17 @@ define([
 ){
 
     var Collection = Backbone.Collection.extend({
-    	model: scoreModel
+    	model: scoreModel,
+        url: '/scoreboard'
     	//компаратор применяется что бы постоянно поддерживать коллекцию в отсортированном состоянии
     });
 
     //java-сервер ajax-ом должен сюда прислать 10 лучших пользователей
-    var collections = new Collection([
-                    new scoreModel({
-                        name: 'Женя',
-                        score: -77777
-                    }),
-                    new scoreModel({
-                        name: 'Том Круз',
-                        score: -43
-                    }),
-                    new scoreModel({
-                        name: 'Энди Дюфрейн',
-                        score: 453
-                    }),
-                    new scoreModel({
-                        name: 'Брюс Уэйн',
-                        score: -43
-                    }),      
-                    new scoreModel()           
-                ]);
+
+    var collections = new Collection();
+    collections.fetch({update: true, remove: false});
+
+    //collections.fetch();
 
     collections = collections.sortBy(function(model) {
         return -model.get('score');
@@ -41,5 +28,6 @@ define([
     collections = new Collection(collections);
 
     return collections;
+
 
 });

@@ -49,7 +49,7 @@ module.exports = function (grunt) {
             }
         },
         concurrent: {
-            target: ['watch', 'shell'],
+            target: [ 'watch','shell'],
             options: {
 
                 logConcurrentOutput: true /* Вывод процесса */

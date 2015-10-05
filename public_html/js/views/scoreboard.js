@@ -32,8 +32,7 @@ define([
             this.$el.show();
         },
         hide: function () {
-            this.$el.hide();
-            Backbone.history.navigate('', { trigger: true });
+            this.$el.detach();
         }
 
     });

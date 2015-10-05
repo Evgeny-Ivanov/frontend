@@ -22,11 +22,9 @@ define([
             $(this.el).show();
         },
         hide: function () {
-            //this.el$.remove();//удаляет элемент из DOM и все связанные с ним обработчики
-            //this.el$.detach();//удаляет элемент из DOM но не трогает обработчики
-            this.$el.hide();
+            this.$el.detach();//удаляет элемент из DOM но не трогает обработчики
             //что бы вызвать функцию роутера,установите свойство trigger в true.
-            Backbone.history.navigate('', { trigger: true });
+            //Backbone.history.navigate('', { trigger: true });
         }
 
     });
