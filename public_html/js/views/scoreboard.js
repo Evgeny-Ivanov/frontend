@@ -1,19 +1,29 @@
 define([
     'backbone',
-    'tmpl/scoreboard'
+    'tmpl/scoreboard',
+    'models/score',
+    'collections/scores'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    scoreModel,
+    collectionsScores
 ){
 
+    var scoremodel = new scoreModel();
     var View = Backbone.View.extend({
-
+        id:'scoreboardView',
         template: tmpl,
         events: {
-            "click ":"hide",
+            'click .back-in-main-menu': 'hide'
         },
         initialize: function () {
             this.$el.html(this.template());
+
+            var self = this;             
+            collectionsScores.forEach(function(num){
+            self.$el.find('.players').append('<li class = "players__player">'+num.get('name')+' : '+num.get('score')+'</li>');
+            });
         },
         render: function () {
             // TODO
@@ -22,10 +32,10 @@ define([
             this.$el.show();
         },
         hide: function () {
-            this.$el.hide();
+            this.$el.detach();
         }
 
     });
 
-    return new View();
+    return new View({model: scoremodel});
 });

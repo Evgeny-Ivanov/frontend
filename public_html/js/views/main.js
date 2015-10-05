@@ -10,7 +10,9 @@ define([
         id:'mainView',
         template: tmpl,
         events: {
-            'click': 'hide'
+            'click .js-start-game': 'hide',
+            'click .js-scoreboard': 'hide',
+            'click .js-login': 'hide'
         },
         initialize: function () {
             this.$el.html(this.template());
@@ -21,8 +23,7 @@ define([
             $(this.el).show();
         },
         hide: function () {
-            //this.remove();
-            this.$el.hide();
+            this.$el.detach();
         }
 
 
