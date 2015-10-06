@@ -12,7 +12,8 @@ define([
         events: {
             'click .js-start-game': 'hide',
             'click .js-scoreboard': 'hide',
-            'click .js-login': 'hide'
+            'click .js-login': 'hide',
+            'click .js-registration': 'hide'
         },
         initialize: function () {
             this.$el.html(this.template());

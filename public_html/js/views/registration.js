@@ -1,6 +1,6 @@
 define([
     'backbone',
-    'tmpl/login',
+    'tmpl/registration',
     'router'
 ], function(
     Backbone,
@@ -9,12 +9,13 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        className: 'loginView',
+        className: 'registrationView',
         template: tmpl,
         events: {
             'click .back-in-main-menu': 'hide',
             'submit .ajax-signin': 'ajaxAuthorization',
             'input .ajax-signin__input-email': 'isValidityEmail',
+            'input .ajax-signin__input-login': 'isValidityLogin',
             'input .ajax-signin__input-password': 'isValidityPassword'
         },
 
@@ -33,7 +34,7 @@ define([
 
             setting = {
                 type: "POST",
-                url: "/api/v1/auth/signin",
+                url: "/api/v1/auth/signup",
                 dataType: 'json',
                 error : function(xhr, status, error) {
                            alert(xhr.responseText + '|\n' + status + '|\n' +error);
@@ -53,9 +54,12 @@ define([
                           }
             };
             var password = $("#inputPassword3").val();
+            var login = $("#inputLogin3").val();
             var email = $('#inputEmail3').val();
             console.log('email = '+email);
-            setting.data = {"email": email,"password":password};
+            setting.data = {"email": email,
+                            "password": password,
+                            "login": login};
             $.ajax(setting);
         },
         isValidityEmail: function(event){
@@ -76,12 +80,31 @@ define([
             if(valPassword.length<4) event.target.setCustomValidity("Пароль слишком короткий");   
             else event.target.setCustomValidity("");
 
+            if(valPassword=="123") event.target.setCustomValidity("Пароль 123 небезопасен");   
+            else event.target.setCustomValidity("");
+
             if (event.target.validity.valid) {
                 this.$el.find('.ajax-signin__status-logo-password').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
                 this.$el.find('.ajax-signin__input-password').removeClass('has-error').addClass('has-success');
             } else {
                 this.$el.find('.ajax-signin__status-logo-password').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
                 this.$el.find('.ajax-signin__input-password').removeClass('has-success').addClass('has-error');
+            }
+
+        },
+
+        isValidityLogin: function(event){
+            var valLogin = this.$el.find('.ajax-signin #inputLogin3').val();
+
+            if(valLogin.length<4) event.target.setCustomValidity("Логин слишком короткий");   
+            else event.target.setCustomValidity("");
+
+            if (event.target.validity.valid) {
+                this.$el.find('.ajax-signin__status-logo-login').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
+                this.$el.find('.ajax-signin__input-login').removeClass('has-error').addClass('has-success');
+            } else {
+                this.$el.find('.ajax-signin__status-logo-login').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
+                this.$el.find('.ajax-signin__input-login').removeClass('has-success').addClass('has-error');
             }
 
         }

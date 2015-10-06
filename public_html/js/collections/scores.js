@@ -14,8 +14,12 @@ define([
 
     //java-сервер ajax-ом должен сюда прислать 10 лучших пользователей
 
-    var collections = new Collection();
-    collections.fetch({update: true, remove: false});
+    var collections = new Collection([
+        {name: "Тим", score: 5},
+        {name: "Ида", score: 26},
+        {name: "Роб", score: 55}
+    ]);
+    //collections.fetch({update: true, remove: false});
 
     //collections.fetch();
 

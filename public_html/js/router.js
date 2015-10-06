@@ -3,14 +3,16 @@ define([
     'views/main',
     'views/game',
     'views/login',
-    'views/scoreboard'
+    'views/scoreboard',
+    'views/registration'
 
 ], function(
     Backbone,
     mainView,
     gameView,
     loginView,
-    scoreboardView
+    scoreboardView,
+    registrationView
 ){
 
 
@@ -19,6 +21,7 @@ define([
         routes: {
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
+            'registration': 'registrationAction',
             'login': 'loginAction',
             '*default': 'defaultActions'
         },
@@ -41,6 +44,11 @@ define([
         loginAction: function () {
             this.$el.empty();
         	this.$el.append(loginView.el);
+            loginView.show();
+        },
+        registrationAction: function () {
+            this.$el.empty();
+            this.$el.append(registrationView.el);
             loginView.show();
         }
     });
