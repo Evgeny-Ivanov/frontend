@@ -11,6 +11,7 @@
                 <li> <a href="#game" class="js-start-game">Play</a> </li>            	
                 <li> <a href="#scoreboard" class="js-scoreboard">Score Board</a> </li>
                 <li> <a href="#login" class="js-login">Login</a> </li>
+                <li> <a href="#registration" class="js-registration">Registration</a> </li>
             </ul>
         </div>
 
