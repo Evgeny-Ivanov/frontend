@@ -9,7 +9,7 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        className: 'registrationView',
+        el: $("#page"),
         template: tmpl,
         events: {
             'click .back-in-main-menu': 'hide',
@@ -20,19 +20,20 @@ define([
         },
 
         initialize: function () {
-            this.$el.html(this.template());
         },
         render: function () {
+            this.$el.html(this.template());
+            return this;
         },
         show: function () {
+            this.render();
             this.$el.show();
         },
         hide: function () {
-            this.$el.detach();
         },
         ajaxAuthorization: function(){
 
-            setting = {
+            var setting = {
                 type: "POST",
                 url: "/api/v1/auth/signup",
                 dataType: 'json',
@@ -80,7 +81,7 @@ define([
             if(valPassword.length<4) event.target.setCustomValidity("Пароль слишком короткий");   
             else event.target.setCustomValidity("");
 
-            if(valPassword=="123") event.target.setCustomValidity("Пароль 123 небезопасен");   
+            if(valPassword=="1234") event.target.setCustomValidity("Пароль 1234 небезопасен");   
             else event.target.setCustomValidity("");
 
             if (event.target.validity.valid) {
