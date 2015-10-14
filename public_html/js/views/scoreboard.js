@@ -12,27 +12,22 @@ define([
 
     var scoremodel = new scoreModel();
     var View = Backbone.View.extend({
-        id:'scoreboardView',
+        el: $("#page"),
+        collection: collectionsScores,
         template: tmpl,
         events: {
             'click .back-in-main-menu': 'hide'
         },
         initialize: function () {
-            this.$el.html(this.template());
-
-            var self = this;             
-            collectionsScores.forEach(function(num){
-                var li = self.$el.find('.players').append('<li class = "players__player">'+num.get('name')+' : '+num.get('score')+'</li>');
-            });
         },
-        render: function () {
-            // TODO
+        render: function () {           
+            this.$el.html(this.template(this.collection.toJSON()));
         },
         show: function () {
+            this.render();
             this.$el.show();
         },
         hide: function () {
-            this.$el.detach();
         }
 
     });
