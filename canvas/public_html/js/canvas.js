@@ -6,15 +6,15 @@ function Circle(x,y,radius,color){
 	this.count = 0;
 
 	var maxVelocity = 10;
-	this.velocity = {
-		x : 5,
-		y : 5
-	}
+	var signX = 1;
+	if(Math.random()>0.5) signX = -1;
+	var signY = 1;
+	if(Math.random()>0.5) signY = -1;
 
-	if( Math.random() > 0.5 ) this.signX = -1;
-	else this.signX = 1;
-	if( Math.random() > 0.5 ) this.signY = -1;
-	else this.signY = 1;
+	this.velocity = {
+		x : Math.random()*5*signX,
+		y : Math.random()*5*signY
+	}
 
 }
 
@@ -43,8 +43,8 @@ Circle.prototype.animate = function(){
 	var animateThis = function(){
 		requestAnimationFrame(animateThis);
 		self.clear();//шарики накладываются друг на друга т.к. они не проверяют будующего положения остальных
-		self.x += self.velocity.x*self.signX;//надо обдумать последовательность
-		self.y += self.velocity.y*self.signY;
+		self.x += self.velocity.x;//надо обдумать последовательность
+		self.y += self.velocity.y;
 		self.isСontact();
 		self.draw();
 	}
@@ -57,7 +57,7 @@ Circle.prototype.isPointInPath = function(x,y){
 //if(!y) return;//костыль т.к. видимо в Math.sqrt бывает Nane и он приходит сюда
 var imageData = this.context.getImageData(x,y,1,1);	
    
-	//все 255 - белый
+
 	
 	//вроде работает - но до того как мы не закрасили канвас - его цвет не белый (255.255.255) а (0.0.0)
 	//alert(String(imageData.data[0])+"   "+String(imageData.data[1])+"   "+String(imageData.data[2]));
@@ -112,35 +112,36 @@ Circle.prototype.isСontact = function(){
 
 
 Circle.prototype.ifCollision = function(x,y){
-
     //нужно как то определить с каким шаром столкнулся наш шар
-	if(x==0){
-		this.signX*=1;
-		this.signY*=-1;
-		return;
-	}
-	if(y==0){
-		this.signX*=-1;
-		this.signY*=1;
-		return;
-	}
-	if(x>0 && y>0){		
-		this.signX*=-1;
-		this.signY*=-1;
-	}
-	if(x>0 && y<0){
-		this.signX*=-1;
-		this.signY*=-1;
-	}
-	if(x<0 && y>0){
-		this.signX*=-1;
-		this.signY*=-1;
-	}
-	if(x<0 && y<0){
-		this.signX*=-1;
-		this.signY*=-1;
-	}
+    //masCircle - как то нужно сюда пропехнуть
+    canvas.height
+	canvas.width//x
+	var indent = 10;
+    if(x>canvas.width-indent || x<indent){
+    	this.velocity.x*=-1
+    	return;
+    }
+    if(y>canvas.height-indent || y<indent){
+    	this.velocity.y*=-1
+    	return;
+    }
+    var circle = this.findSecondCircle(x,y,this.masCircle);//стенку надо как то подругому обрабатывать
+    console.dir(circle);
+    this.velocity.x = this.calculateVelocity(this.velocity.x,circle.velocity.x);
+	this.velocity.y = this.calculateVelocity(this.velocity.y,circle.velocity.y);
 
+}
+
+Circle.prototype.calculateVelocity = function(v1,v2){
+	//v1 - скорость нашего шара
+	//v1,v2 - проэкции скорости первого и второго шаров
+	//можно сделать еще более универсально если учитывать массу
+	var D = (v1+v2)*(v1+v2) - 4*v1*v2;
+	var V1 = ( (v1+v2) + Math.sqrt(D) )/2
+	var V2 = ( (v1+v2) - Math.sqrt(D) )/2
+
+	if(v1>v2) return V1;
+	else return V2;
 }
 
 Circle.prototype.setRandomColor = function(){
@@ -148,6 +149,23 @@ Circle.prototype.setRandomColor = function(){
 	var green =  String(Math.round(Math.random()*255));
 	var blue =  String(Math.round(Math.random()*255));
 	this.color = "rgb("+red+","+green+","+blue+")";
+}
+
+Circle.prototype.findSecondCircle = function(x,y,masCircle){
+	var newX = x+5;
+	var newY = y+5;
+
+	for(i=0;i<masCircle.length;i++){
+		if(masCircle[i].checkAccessory(newX,newY)==true)
+			return masCircle[i];
+	}
+
+}
+
+Circle.prototype.checkAccessory = function(x,y){
+    var check = Math.sqrt( (this.x-x)*(this.x-x) + (this.y-y)*(this.y-y) );
+    if(check <=  this.radius) return true;
+    return false;
 }
 
 //Circle.prototype.setSmoothlyColor = function(){
@@ -167,6 +185,9 @@ function setBackgroundColor(color,context){
 	//Завершающий шаг это вызовом метода stroke или fill.
     //Собственно первый обводит фигуру линиями, а второй заливает фигуру сплошным цветом.
 }
+
+
+
  
 
 var canvas = $(".js-canvas")[0];
@@ -175,33 +196,30 @@ canvas.width = document.documentElement.clientWidth;//1082
 context = canvas.getContext('2d');
 //закрашиваем canvas 
 setBackgroundColor("#FFFFFF",context);
-var sizeCircle = 10;
+var sizeCircle = 20;
 
 
-var masCircle = [new Circle(100,99,sizeCircle,"#FF6672"),
-				 new Circle(430,99,sizeCircle,"#FF6672"),
-				 new Circle(553,99,sizeCircle,"#FF6672"),
-				 new Circle(323,929,sizeCircle,"#FF6672"),
-				 new Circle(979,113,sizeCircle,"#FF6672"),
-				 new Circle(600,200,sizeCircle,"#FF6672"),
-				 new Circle(900,334,sizeCircle,"#FF6672"),
-				 new Circle(700,234,sizeCircle,"#FF6672"),
-				 new Circle(1000,500,sizeCircle,"#FF6672"),
-				 new Circle(123,99,sizeCircle,"#FF6672")]
+var masCircle = []
+
 
 for(i=0;i<masCircle.length;i++){//почему не заработал for in ?
+	masCircle[i].masCircle = masCircle;//магия
 	masCircle[i].draw();
 	masCircle[i].animate();
 }
 
 
 //мышь в качестве объекта 
-canvas.onmousemove = function(evt) {
+var counter = 0;
+//onmousemove
+canvas.onclick = function(evt) {
+	counter+=1;
 	var mouseX = evt.pageX - canvas.offsetLeft;
 	var mouseY = evt.pageY - canvas.offsetTop;
-	var circle = new Circle(mouseX,mouseY,10,"#FF6672");
+	var circle = new Circle(mouseX,mouseY,20,"#FF6672");
 	circle.draw();
 	circle.animate();
+	masCircle[masCircle.length] = circle;
 	text = "Координаты "+mouseX+":"+mouseY;
 	console.log(text);
 }
