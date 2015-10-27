@@ -9,10 +9,9 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: $("#page"),
+        id: "registrationView",
         template: tmpl,
         events: {
-            'click .back-in-main-menu': 'hide',
             'submit .ajax-signin': 'ajaxAuthorization',
             'input .ajax-signin__input-email': 'isValidityEmail',
             'input .ajax-signin__input-login': 'isValidityLogin',
@@ -20,16 +19,20 @@ define([
         },
 
         initialize: function () {
+            this.render();
+            $(document.body).append(this.$el);
+            this.hide();
         },
         render: function () {
             this.$el.html(this.template());
             return this;
         },
         show: function () {
-            this.render();
+            this.trigger("show");
             this.$el.show();
         },
         hide: function () {
+            this.$el.hide();
         },
         ajaxAuthorization: function(){
 

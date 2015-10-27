@@ -7,25 +7,25 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: $("#page"),
+        id: "mainView",
         template: tmpl,
         events: {
-            'click .js-start-game': 'hide',
-            'click .js-scoreboard': 'hide',
-            'click .js-login': 'hide',
-            'click .js-registration': 'hide'
         },
         initialize: function () {
+            this.render();
+            $(document.body).append(this.$el);
+            this.hide();
         },
         render: function () {
             this.$el.html(this.template());
             return this;
         },
         show: function () {
-            this.render();
+            this.trigger('show'); 
             this.$el.show();
         },
         hide: function () {
+            this.$el.hide();
             //наверно надо тут удалять обработчики
             //при инициализации приложения все обработчики из всех вьюшек начинают работать 
         }

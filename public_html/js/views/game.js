@@ -7,23 +7,24 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: $("#page"),
+        id: "gameView",
         template: tmpl,
         events: {
-            'click .back-in-main-menu': 'hide'
         },
         initialize: function () {
+            this.render();
+            $(document.body).append(this.$el);
+            this.hide();
         },
         render: function () {
             this.$el.html(this.template());
         },
         show: function () {
-            this.render();
+            this.trigger('show',this);
             $(this.el).show();
         },
         hide: function () {
-            //что бы вызвать функцию роутера,установите свойство trigger в true.
-            //Backbone.history.navigate('', { trigger: true });
+            this.$el.hide();
         }
 
     });

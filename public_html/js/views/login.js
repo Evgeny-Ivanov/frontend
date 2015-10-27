@@ -9,27 +9,29 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: $("#page"),
+        id: "loginView",
         template: tmpl,
         events: {
-            'click .back-in-main-menu': 'hide',
             'submit .ajax-signin': 'ajaxAuthorization',
             'input .ajax-signin__input-email': 'isValidityEmail',
             'input .ajax-signin__input-password': 'isValidityPassword'
         },
 
         initialize: function () {
+            this.render();
+            $(document.body).append(this.$el);
+            this.hide();
         },
         render: function () {
             this.$el.html(this.template());
             return this;
         },
         show: function () {
-            this.render();
+            this.trigger("show");
             this.$el.show();
         },
         hide: function () {
-            console.log("hide login");
+            this.$el.hide();
         },
         ajaxAuthorization: function(){
 
