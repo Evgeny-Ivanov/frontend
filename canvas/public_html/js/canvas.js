@@ -89,8 +89,17 @@ Circle.prototype.isСontact = function(){
 		if(x==0) indentX = 0;
 		if(y==0) indentY = 0;
 
+//////////
+//	this.context.beginPath();
+//	this.context.fillStyle = color||this.color;
+//	this.context.rect( x + this.x + indentX, y + this.y + indentY,1,1 );
+//	context.rect(x + this.x + indentX, -y + this.y + indentY,1,1 );
+//	this.context.closePath();
+//	this.context.fill();
+//////////
+
 		if(this.isPointInPath( x + this.x + indentX, y + this.y + indentY )){ 
-			this.ifCollision(x,y);
+			this.ifCollision( x + this.x + indentX, y + this.y + indentY);
 			this.setRandomColor();
 			this.count++;
 			//console.log(this.count);
@@ -99,7 +108,7 @@ Circle.prototype.isСontact = function(){
 		}
 		//else this.color = "#FF6672";
 		if(this.isPointInPath( x + this.x + indentX, -y + this.y + indentY)){
-			this.ifCollision(x,y);
+			this.ifCollision( x + this.x + indentX, -y + this.y + indentY);
 			this.setRandomColor();
 			this.count++;
 			//console.log(this.count);
@@ -125,10 +134,15 @@ Circle.prototype.ifCollision = function(x,y){
     	this.velocity.y*=-1
     	return;
     }
-    var circle = this.findSecondCircle(x,y,this.masCircle);//стенку надо как то подругому обрабатывать
-    console.dir(circle);
-    this.velocity.x = this.calculateVelocity(this.velocity.x,circle.velocity.x);
-	this.velocity.y = this.calculateVelocity(this.velocity.y,circle.velocity.y);
+    //использую глобальный объект - очень плохо
+    var circle = this.findSecondCircle(x,y,masCircle);//стенку надо как то подругому обрабатывать
+    if(!circle) return;
+    //alert(circle);//фиксируются столкновения с самим собой
+    var xx = String(this.velocity.x);
+    var yy = String(this.velocity.y);
+    this.velocity.x = Math.round( this.calculateVelocity(this.velocity.x,circle.velocity.x) ) ; 
+	this.velocity.y = Math.round( this.calculateVelocity(this.velocity.y,circle.velocity.y) ) ;
+	//alert("было: " + xx+" " + yy + " стало: " + String(this.velocity.x)+"  "+String(this.velocity.y));
 
 }
 
@@ -152,13 +166,20 @@ Circle.prototype.setRandomColor = function(){
 }
 
 Circle.prototype.findSecondCircle = function(x,y,masCircle){
-	var newX = x+5;
-	var newY = y+5;
+	var newX = x+1;
+	var newY = y+1;
 
 	for(i=0;i<masCircle.length;i++){
-		if(masCircle[i].checkAccessory(newX,newY)==true)
-			return masCircle[i];
+		if(masCircle[i].checkAccessory(newX,newY)==true){
+			if(masCircle[i]!==this)//костыль
+				{	//alert(masCircle[i]);
+				return masCircle[i];//почему то часто возвращается undefind
+			}
+			else return null;
+		}
 	}
+
+	return null;
 
 }
 
@@ -216,7 +237,7 @@ canvas.onclick = function(evt) {
 	counter+=1;
 	var mouseX = evt.pageX - canvas.offsetLeft;
 	var mouseY = evt.pageY - canvas.offsetTop;
-	var circle = new Circle(mouseX,mouseY,20,"#FF6672");
+	var circle = new Circle(mouseX,mouseY,50,"#FF6672");
 	circle.draw();
 	circle.animate();
 	masCircle[masCircle.length] = circle;
