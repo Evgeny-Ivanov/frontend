@@ -1,9 +1,9 @@
-function Circle(x,y,radius,color){
+function Circle(x,y,radius,color,masCircle){
+	this.masCircle = masCircle;
 	this.color = color;
 	this.x = x;
 	this.y = y;
 	this.radius = radius;
-	this.count = 0;
 
 	var maxVelocity = 10;
 	var signX = 1;
@@ -12,8 +12,8 @@ function Circle(x,y,radius,color){
 	if(Math.random()>0.5) signY = -1;
 
 	this.velocity = {
-		x : Math.round(Math.random()*5*signX),
-		y : Math.round(Math.random()*5*signY)
+		x : Math.round(Math.random()*maxVelocity*signX),
+		y : Math.round(Math.random()*maxVelocity*signY)
 	}
 
 	this.id = "координаты: "+ String(x) + " , " + String(y) +" velocity: " + this.velocity.x+ " ," + this.velocity.y; 
@@ -40,127 +40,74 @@ Circle.prototype.clear = function(){
 	this.draw("#FFFFFF",this.radius+1);
 }
 
+
 Circle.prototype.animate = function(){ 
 	var self = this;
-	var animateThis = function(){
+	var animateThis = function(time){
 		requestAnimationFrame(animateThis);
-		self.clear();//шарики накладываются друг на друга т.к. они не проверяют будующего положения остальных
-		self.x += self.velocity.x;//надо обдумать последовательность
-		self.y += self.velocity.y;
+		self.clear();
 		self.isСontact();
+		self.x += self.velocity.x;
+		self.y += self.velocity.y;
 		self.draw();
 	}
 	animateThis();
 } 
 
-
-Circle.prototype.isPointInPath = function(x,y){
-
-//if(!y) return;//костыль т.к. видимо в Math.sqrt бывает Nane и он приходит сюда
-var imageData = this.context.getImageData(x,y,1,1);	
-   
-
-	
-	//вроде работает - но до того как мы не закрасили канвас - его цвет не белый (255.255.255) а (0.0.0)
-	//alert(String(imageData.data[0])+"   "+String(imageData.data[1])+"   "+String(imageData.data[2]));
-    if(imageData.data[0] != 255 && imageData.data[1] != 255 && imageData.data[2] != 255) return true;
-    else return false;
-    //imageData.data[0] значение красного цвета (число от 0 до 255);
-    //imageData.data[1] //значение зеленого цвета (число от 0 до 255);
-    //imageData.data[2] //значение синего цвета (число от 0 до 255);
-    //imageData.data[3] //значение прозрачности (число от 0 до 255);
-
-}
-
-
 Circle.prototype.isСontact = function(){
 
-	var x = this.radius;
-	var y = 0;
-	var step = 1;
-	var indent = 1;
-	while(x>-this.radius){
-		x = x - step;
-		y = Math.round(Math.sqrt(this.radius*this.radius - x*x));
 
-		if(x>0) var indentX = 1*indent;//отступ,при приближении на это растояние произойдет удар
-		else var identX = -1*indent;
-		if(y>0) var indentY = 1*indent;//отступ,при приближении на это растояние произойдет удар
-		else var identY = -1*indent;
+    if(this.x>canvas.width-this.radius || this.x<=this.radius){
+    	this.velocity.x*=-1
+    	return;
+    }
+    if(this.y>canvas.height-this.radius || this.y<=this.radius){
+    	this.velocity.y*=-1
+    	return;
+    }
 
-		if(x==0) indentX = 0;
-		if(y==0) indentY = 0;
+	var indent1 = Math.round(Math.sqrt(this.velocity.x*this.velocity.x + this.velocity.y*this.velocity.y));
+	var stock = 2;
 
-//////////
-//	this.context.beginPath();
-//	this.context.fillStyle = color||this.color;
-//	this.context.rect( x + this.x + indentX, y + this.y + indentY,1,1 );
-//	context.rect(x + this.x + indentX, -y + this.y + indentY,1,1 );
-//	this.context.closePath();
-//	this.context.fill();
-//////////
+	for(i=0;i<this.masCircle.length;i++){
 
-		if(this.isPointInPath( x + this.x + indentX, y + this.y + indentY )){ 
-			this.ifCollision( x + this.x + indentX, y + this.y + indentY);
+		var indent2 = Math.round(Math.sqrt(masCircle[i].velocity.x*masCircle[i].velocity.x + masCircle[i].velocity.y*masCircle[i].velocity.y));
+		var cathetusX = this.x - masCircle[i].x;
+		var cathetusY = this.y - masCircle[i].y;
+		var hypotenuse = Math.sqrt(cathetusY*cathetusY + cathetusX*cathetusX);
+		var limit = this.radius + masCircle[i].radius + indent1 + indent2;
+
+		if( hypotenuse <= limit && masCircle[i]!=this){
+			this.ifCollision(masCircle[i]);
 			this.setRandomColor();
-			this.count++;
-			//console.log(this.count);
-			return;
+		}
 
-		}
-		//else this.color = "#FF6672";
-		if(this.isPointInPath( x + this.x + indentX, -y + this.y + indentY)){
-			this.ifCollision( x + this.x + indentX, -y + this.y + indentY);
-			this.setRandomColor();
-			this.count++;
-			//console.log(this.count);
-			return;
-		}
-		//else this.color = "#FF6672";
 	}
 
 }
 
 
-Circle.prototype.ifCollision = function(x,y){
-    //нужно как то определить с каким шаром столкнулся наш шар
-    //masCircle - как то нужно сюда пропехнуть
-    canvas.height
-	canvas.width//x
-	var indent = 10;
-    if(x>canvas.width-indent || x<indent){
-    	this.velocity.x*=-1
-    	return;
-    }
-    if(y>canvas.height-indent || y<indent){
-    	this.velocity.y*=-1
-    	return;
-    }
-    //использую глобальный объект - очень плохо
-    var circle = this.findSecondCircle(x,y,masCircle);//стенку надо как то подругому обрабатывать
-    if(!circle) return;
-    console.log(this,circle);
-    //до этого все работает более или менее не плохо
+Circle.prototype.ifCollision = function(circle){
 
-    //this.velocity.x*=-1;
-	//this.velocity.y*=-1;
-    //alert(circle);//фиксируются столкновения с самим собой
-    //var xx = String(this.velocity.x);
-    //var yy = String(this.velocity.y);
-    this.velocity.x = Math.round( this.calculateVelocity(this.velocity.x,circle.velocity.x) ) ; 
-	this.velocity.y = Math.round( this.calculateVelocity(this.velocity.y,circle.velocity.y) ) ;
-	//alert("было: " + xx+" " + yy + " стало: " + String(this.velocity.x)+"  "+String(this.velocity.y));
+    console.log(this,circle);
+    var mass1 = 3.14*this.radius*this.radius;
+	var mass2 = 3.14*circle.radius*circle.radius;
+    this.velocity.x = Math.round( this.calculateVelocity(this.velocity.x,circle.velocity.x,mass1,mass2) ) ; 
+	this.velocity.y = Math.round( this.calculateVelocity(this.velocity.y,circle.velocity.y,mass1,mass2) ) ;
 
 }
 
-Circle.prototype.calculateVelocity = function(v1,v2){
+Circle.prototype.calculateVelocity = function(v1,v2,m1,m2){
 	//v1 - скорость нашего шара
 
 	//v1,v2 - проэкции скорости первого и второго шаров
-	//можно сделать еще более универсально если учитывать массу
-	var D = (v1+v2)*(v1+v2) - 4*v1*v2;
-	var V1 = -1*( (v1+v2) + Math.sqrt(D) )/2;
-	var V2 = -1*( (v1+v2) - Math.sqrt(D) )/2;
+	var E = 0;
+	var a = m2*m2 + m1*m2;
+	var b = -2*(m2*v2 + m1*v1)*m2;
+	var c = (m1*v1+m2*v2)*(m1*v1+m2*v2) - (m1*v1*v1+m2*v2*v2 + E)*m1;
+	var D = b*b - 4*a*c;
+	var V1 = -1*(-b + Math.sqrt(D))/(2*a);
+	var V2 = -1*(-b - Math.sqrt(D))/(2*a);
 	//не учитываем знаки 
 	if( (v1<0 && v2<0) || (v2>0 && v1>0) ){
 		//если первоначальная скорость нашего шара была меньше второго то скорость возрастет
@@ -181,23 +128,6 @@ Circle.prototype.setRandomColor = function(){
 	this.color = "rgb("+red+","+green+","+blue+")";
 }
 
-Circle.prototype.findSecondCircle = function(x,y,masCircle){
-	var newX = x;
-	var newY = y;
-
-	for(i=0;i<masCircle.length;i++){
-		if(masCircle[i].checkAccessory(newX,newY)==true){
-			if(masCircle[i]!==this)//костыль
-				{	//alert(masCircle[i]);
-					return masCircle[i];//почему то часто возвращается undefind
-			}
-			else return null;
-		}
-	}
-
-	return null;
-
-}
 
 Circle.prototype.checkAccessory = function(x,y){
     var check = Math.sqrt( (this.x-x)*(this.x-x) + (this.y-y)*(this.y-y) );
@@ -233,27 +163,12 @@ canvas.width = document.documentElement.clientWidth;//1082
 context = canvas.getContext('2d');
 //закрашиваем canvas 
 setBackgroundColor("#FFFFFF",context);
-var sizeCircle = 20;
 
-
-var masCircle = []
-
-
-for(i=0;i<masCircle.length;i++){//почему не заработал for in ?
-	masCircle[i].masCircle = masCircle;//магия
-	masCircle[i].draw();
-	masCircle[i].animate();
-}
-
-
-//мышь в качестве объекта 
-var counter = 0;
-//onmousemove
+var masCircle = [];
 canvas.onclick = function(evt) {
-	counter+=1;
 	var mouseX = evt.pageX - canvas.offsetLeft;
 	var mouseY = evt.pageY - canvas.offsetTop;
-	var circle = new Circle(mouseX,mouseY,50,"#FF6672");
+	var circle = new Circle(mouseX,mouseY,30,"#FF6672",masCircle);
 	circle.draw();
 	circle.animate();
 	masCircle[masCircle.length] = circle;
