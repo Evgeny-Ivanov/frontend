@@ -12,9 +12,11 @@ function Circle(x,y,radius,color){
 	if(Math.random()>0.5) signY = -1;
 
 	this.velocity = {
-		x : Math.random()*5*signX,
-		y : Math.random()*5*signY
+		x : Math.round(Math.random()*5*signX),
+		y : Math.round(Math.random()*5*signY)
 	}
+
+	this.id = "координаты: "+ String(x) + " , " + String(y) +" velocity: " + this.velocity.x+ " ," + this.velocity.y; 
 
 }
 
@@ -137,9 +139,14 @@ Circle.prototype.ifCollision = function(x,y){
     //использую глобальный объект - очень плохо
     var circle = this.findSecondCircle(x,y,masCircle);//стенку надо как то подругому обрабатывать
     if(!circle) return;
+    console.log(this,circle);
+    //до этого все работает более или менее не плохо
+
+    //this.velocity.x*=-1;
+	//this.velocity.y*=-1;
     //alert(circle);//фиксируются столкновения с самим собой
-    var xx = String(this.velocity.x);
-    var yy = String(this.velocity.y);
+    //var xx = String(this.velocity.x);
+    //var yy = String(this.velocity.y);
     this.velocity.x = Math.round( this.calculateVelocity(this.velocity.x,circle.velocity.x) ) ; 
 	this.velocity.y = Math.round( this.calculateVelocity(this.velocity.y,circle.velocity.y) ) ;
 	//alert("было: " + xx+" " + yy + " стало: " + String(this.velocity.x)+"  "+String(this.velocity.y));
@@ -148,14 +155,23 @@ Circle.prototype.ifCollision = function(x,y){
 
 Circle.prototype.calculateVelocity = function(v1,v2){
 	//v1 - скорость нашего шара
+
 	//v1,v2 - проэкции скорости первого и второго шаров
 	//можно сделать еще более универсально если учитывать массу
 	var D = (v1+v2)*(v1+v2) - 4*v1*v2;
-	var V1 = ( (v1+v2) + Math.sqrt(D) )/2
-	var V2 = ( (v1+v2) - Math.sqrt(D) )/2
+	var V1 = -1*( (v1+v2) + Math.sqrt(D) )/2;
+	var V2 = -1*( (v1+v2) - Math.sqrt(D) )/2;
+	//не учитываем знаки 
+	if( (v1<0 && v2<0) || (v2>0 && v1>0) ){
+		//если первоначальная скорость нашего шара была меньше второго то скорость возрастет
+		if(Math.abs(v1)<Math.abs(v2)) return V1;
+		else return V2;
+	}
+	else{
+		if(Math.abs(v1)<Math.abs(v2)) return V2;
+		else return V1;
+	}
 
-	if(v1>v2) return V1;
-	else return V2;
 }
 
 Circle.prototype.setRandomColor = function(){
@@ -166,14 +182,14 @@ Circle.prototype.setRandomColor = function(){
 }
 
 Circle.prototype.findSecondCircle = function(x,y,masCircle){
-	var newX = x+1;
-	var newY = y+1;
+	var newX = x;
+	var newY = y;
 
 	for(i=0;i<masCircle.length;i++){
 		if(masCircle[i].checkAccessory(newX,newY)==true){
 			if(masCircle[i]!==this)//костыль
 				{	//alert(masCircle[i]);
-				return masCircle[i];//почему то часто возвращается undefind
+					return masCircle[i];//почему то часто возвращается undefind
 			}
 			else return null;
 		}
