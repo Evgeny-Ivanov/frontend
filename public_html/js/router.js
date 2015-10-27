@@ -4,7 +4,8 @@ define([
     'views/game',
     'views/login',
     'views/scoreboard',
-    'views/registration'
+    'views/registration',
+    'views/viewManager'
 
 ], function(
     Backbone,
@@ -12,10 +13,16 @@ define([
     gameView,
     loginView,
     scoreboardView,
-    registrationView
+    registrationView,
+    viewManager
 ){
 
 
+    viewManager.add(mainView);
+    viewManager.add(gameView);
+    viewManager.add(loginView);
+    viewManager.add(scoreboardView);
+    viewManager.add(registrationView);
 
     var Router = Backbone.Router.extend({
         routes: {
