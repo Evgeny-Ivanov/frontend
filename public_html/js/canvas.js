@@ -170,7 +170,7 @@ var masCircle = [];
 canvas.onclick = function(evt) {
 	var mouseX = evt.pageX - canvas.offsetLeft;
 	var mouseY = evt.pageY - canvas.offsetTop;
-	var circle = new Circle(mouseX,mouseY,10,"#FF6672",masCircle);
+	var circle = new Circle(mouseX,mouseY,20,"#FF6672",masCircle);
 	circle.draw();
 	circle.animate();
 	masCircle[masCircle.length] = circle;
