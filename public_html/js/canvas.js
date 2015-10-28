@@ -89,9 +89,9 @@ Circle.prototype.isСontact = function(){
 
 Circle.prototype.ifCollision = function(circle){
 
-    console.log(this,circle);
-    var mass1 = 3.14*this.radius*this.radius;
-	var mass2 = 3.14*circle.radius*circle.radius;
+    //console.log(this,circle);
+    var mass1 = Math.log(this.radius);
+	var mass2 = Math.log(circle.radius);
     this.velocity.x = Math.round( this.calculateVelocity(this.velocity.x,circle.velocity.x,mass1,mass2) ) ; 
 	this.velocity.y = Math.round( this.calculateVelocity(this.velocity.y,circle.velocity.y,mass1,mass2) ) ;
 
@@ -104,18 +104,20 @@ Circle.prototype.calculateVelocity = function(v1,v2,m1,m2){
 	var E = 0;
 	var a = m2*m2 + m1*m2;
 	var b = -2*(m2*v2 + m1*v1)*m2;
-	var c = (m1*v1+m2*v2)*(m1*v1+m2*v2) - (m1*v1*v1+m2*v2*v2 + E)*m1;
+	var c = (m1*v1+m2*v2)*(m1*v1+m2*v2) - (m1*v1*v1+m2*v2*v2 - 0)*m1;
 	var D = b*b - 4*a*c;
+	//if(D<0) alert("help");
+	//шарики с разной массой исчезают т.к. D<0
 	var V1 = -1*(-b + Math.sqrt(D))/(2*a);
 	var V2 = -1*(-b - Math.sqrt(D))/(2*a);
 	//не учитываем знаки 
 	if( (v1<0 && v2<0) || (v2>0 && v1>0) ){
 		//если первоначальная скорость нашего шара была меньше второго то скорость возрастет
-		if(Math.abs(v1)<Math.abs(v2)) return V1;
+		if(Math.abs(v1*m1)<Math.abs(v2*m2)) return V1;
 		else return V2;
 	}
 	else{
-		if(Math.abs(v1)<Math.abs(v2)) return V2;
+		if(Math.abs(v1*m1)<Math.abs(v2*m2)) return V2;
 		else return V1;
 	}
 
@@ -168,7 +170,7 @@ var masCircle = [];
 canvas.onclick = function(evt) {
 	var mouseX = evt.pageX - canvas.offsetLeft;
 	var mouseY = evt.pageY - canvas.offsetTop;
-	var circle = new Circle(mouseX,mouseY,30,"#FF6672",masCircle);
+	var circle = new Circle(mouseX,mouseY,10,"#FF6672",masCircle);
 	circle.draw();
 	circle.animate();
 	masCircle[masCircle.length] = circle;
