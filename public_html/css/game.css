@@ -1,0 +1,22 @@
+
+
+[adfasdad]{
+	height: 100px;
+	color: white;
+	background-color: white;
+
+}
+
+
+.col-game-right{
+	float: left;
+	height: 100%;
+	width: 50%;
+}
+
+.col-game-left{
+	float: right;
+	height: 100%;
+	width: 50%;
+}
+
