@@ -104,10 +104,11 @@ Circle.prototype.calculateVelocity = function(v1,v2,m1,m2){
 	var E = 0;
 	var a = m2*m2 + m1*m2;
 	var b = -2*(m2*v2 + m1*v1)*m2;
-	var c = (m1*v1+m2*v2)*(m1*v1+m2*v2) - (m1*v1*v1+m2*v2*v2 - 0)*m1;
+	var c = (m1*v1+m2*v2)*(m1*v1+m2*v2) - (m1*v1*v1+m2*v2*v2 - E)*m1;
 	var D = b*b - 4*a*c;
 	//if(D<0) alert("help");
 	//шарики с разной массой исчезают т.к. D<0
+	if(D<0) return v1*-1;
 	var V1 = -1*(-b + Math.sqrt(D))/(2*a);
 	var V2 = -1*(-b - Math.sqrt(D))/(2*a);
 	//не учитываем знаки 
