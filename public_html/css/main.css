@@ -30,6 +30,7 @@ body {
 }
 
 
+
 .col{
 	margin-left: 35%;
 	margin-right: 35%;
@@ -37,21 +38,12 @@ body {
 }
 
 
-.main-menu{
-	text-decoration: none;
-}
-
-.main-menu_text-align-center{	
-	text-align: center;
-	position: relative;
-}
-
-.main-menu__title{
+.menu__title{
 	color: #405261;
 	font-size: 4em;
 }
 
-.main-menu__a{
+.menu__link{
 	line-height: 2em;
 	background-color: #4c6575;
 	color: #fafcff;
@@ -64,12 +56,64 @@ body {
 
 }
 
-.main-menu__a:hover{
+.menu__link:hover{
     transform: scale(1.03);
 	background-color: #405261;
 	color: #FFFFFF;
 }
 
-.a_text-decoration_none{
+
+.menu__link_center{
+	text-align: center;
+}
+
+.menu__link_none{
 	text-decoration: none!important;
+}
+
+/*registration*/
+.input-panel{
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+	background-color: #4c6575;
+	border-radius: 3px;
+}
+
+.data-submit{
+	
+	border:0px;
+	width:100%;
+}
+
+.input-panel_input{
+	position: relative;
+	margin-top: 0.4em;
+	left: 3%;
+	right: 3%;
+	line-height: 2em;
+	height: 2.2em;
+	width: 94%;
+	margin-bottom: 0.4em;
+	border-radius: 3px;
+	color: #4c6575;
+	text-indent: 4%;
+}
+
+.error-input{
+	color: #FF6672;
+}
+
+.success-input{
+	color: #69b241;
+}
+
+.input-panel_input:-moz-placeholder {
+	color: #4c6575; 
+	opacity: 0.7;
+}
+
+.input-panel_input::-webkit-input-placeholder { 
+	text-indent: 4%;
+	color: #4c6575; 
+	opacity: 0.7;
 }

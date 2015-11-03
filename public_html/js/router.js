@@ -17,7 +17,10 @@ define([
     viewManager
 ){
 
-
+	//надо передавать массив
+	// в canvas requestAnimationFrame нужно вызывать не для каждого шарика а для всего массива 
+	// почему ?
+	
     viewManager.add(mainView);
     viewManager.add(gameView);
     viewManager.add(loginView);

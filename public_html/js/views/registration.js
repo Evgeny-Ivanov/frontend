@@ -1,21 +1,29 @@
 define([
     'backbone',
     'tmpl/registration',
-    'router'
+    'router',
+    'models/user',
+    'models/registration'
 ], function(
     Backbone,
     tmpl,
-    router
+    router,
+    modelUser,
+    registrationModel
 ){
 
+//все нужно в модель 
+//исправить BEM названия сущностей
+//переписать коллекцию
+//
     var View = Backbone.View.extend({
         id: "registrationView",
         template: tmpl,
+        model: new modelUser(),
+        renderModel: new registrationModel(),
         events: {
-            'submit .ajax-signin': 'ajaxAuthorization',
-            'input .ajax-signin__input-email': 'isValidityEmail',
-            'input .ajax-signin__input-login': 'isValidityLogin',
-            'input .ajax-signin__input-password': 'isValidityPassword'
+            'submit .ajax-signin': 'authorization',
+            'input .ajax-signin': 'check',
         },
 
         initialize: function () {
@@ -24,7 +32,7 @@ define([
             this.hide();
         },
         render: function () {
-            this.$el.html(this.template());
+            this.$el.html(this.template(this.renderModel.toJSON()));
             return this;
         },
         show: function () {
@@ -34,85 +42,60 @@ define([
         hide: function () {
             this.$el.hide();
         },
-        ajaxAuthorization: function(){
+        check: function(event) {
+            console.log("check");
+            var type = this.$el.find(event.target).attr("type");//узнаем что за поле 
+            var value = this.$el.find(event.target).val();//узнаем что мы в него записали
+            console.log(value);
 
-            var setting = {
-                type: "POST",
-                url: "/api/v1/auth/signup",
-                dataType: 'json',
-                error : function(xhr, status, error) {
-                           alert(xhr.responseText + '|\n' + status + '|\n' +error);
-                           console.log("ajax error");
-                        },
-                success : function(answer){
-                            if(answer == "OK"){
-                                console.log("ajax success");
-                                Backbone.history.navigate('', { trigger: true });
-                            }
-                            else{
-                                var $error = $(".form-horizontal__error-panel"); 
-                                $error.append(answer);
-                                $error.show();
-                            }
+            this.model.set(type,value);//записываем в модель
+            this.model.save();
+                                    //По умолчанию метод validate вызывается только перед save, но также может быть 
+                                    //вызван при выполнении set, если передать {validate:true} в хеше options.
+            console.log(this.model);
+            this.repaintInput(event);
 
-                          }
-            };
-            var password = $("#inputPassword3").val();
-            var login = $("#inputLogin3").val();
-            var email = $('#inputEmail3').val();
-            console.log('email = '+email);
-            setting.data = {"email": email,
-                            "password": password,
-                            "login": login};
-            $.ajax(setting);
+            if(!this.model.isValid()){//проверяем модель на валидность
+                console.log("isValid");
+                return false;
+            }
+            console.log("return true");
+            return true;
         },
-        isValidityEmail: function(event){
-            var valEmail = this.$el.find('.ajax-signin #inputEmail3').val();
-            if (event.target.validity.valid) {
-                this.$el.find('.ajax-signin__status-logo-email').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
-                this.$el.find('.ajax-signin__input-email').removeClass('has-error').addClass('has-success');
-            } else {
-                this.$el.find('.ajax-signin__status-logo-email').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
-                this.$el.find('.ajax-signin__input-email').removeClass('has-success').addClass('has-error');
+        authorization: function(event){
+            event.preventDefault();//отменяем стандартную отправку формы
+
+            this.model.registration();
+            if(model.get("isSuccess")){
+                console.log("Регистрация успешна");
+                Backbone.history.navigate('', { trigger: true });
+            }
+            else{
+                return false;
             }
 
         },
-
-        isValidityPassword: function(event){
-            var valPassword = this.$el.find('.ajax-signin #inputPassword3').val();
-
-            if(valPassword.length<4) event.target.setCustomValidity("Пароль слишком короткий");   
-            else event.target.setCustomValidity("");
-
-            if(valPassword=="1234") event.target.setCustomValidity("Пароль 1234 небезопасен");   
-            else event.target.setCustomValidity("");
-
-            if (event.target.validity.valid) {
-                this.$el.find('.ajax-signin__status-logo-password').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
-                this.$el.find('.ajax-signin__input-password').removeClass('has-error').addClass('has-success');
-            } else {
-                this.$el.find('.ajax-signin__status-logo-password').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
-                this.$el.find('.ajax-signin__input-password').removeClass('has-success').addClass('has-error');
-            }
-
-        },
-
-        isValidityLogin: function(event){
-            var valLogin = this.$el.find('.ajax-signin #inputLogin3').val();
-
-            if(valLogin.length<4) event.target.setCustomValidity("Логин слишком короткий");   
-            else event.target.setCustomValidity("");
+        repaintInput: function(event){
+            //Мезин сказал что это надо делать шаблонизатором
+            console.log("repaintInput");
+            var type = this.$el.find(event.target).attr("type");
+            console.log(type);
+            var message = this.model.get(type+"Message");//получаем ошибку из модели
+                                                         //если ошибки нет вернется пустая строка
+            console.log("message: "+message)
+            event.target.setCustomValidity(message);//если передать сюда пустую строку
+                                                    //браузер воспримет что ошибки нет
 
             if (event.target.validity.valid) {
-                this.$el.find('.ajax-signin__status-logo-login').removeClass('glyphicon-remove').addClass('glyphicon-ok').show();
-                this.$el.find('.ajax-signin__input-login').removeClass('has-error').addClass('has-success');
+                console.log("success");
+                this.renderModel.set(name, this.renderModel.success);
+                this.$el.find(event.target).removeClass('error-input').addClass('success-input');
             } else {
-                this.$el.find('.ajax-signin__status-logo-login').removeClass('glyphicon-ok').addClass('glyphicon-remove').show();
-                this.$el.find('.ajax-signin__input-login').removeClass('has-success').addClass('has-error');
+                console.log("error");
+                this.renderModel.set(name, this.renderModel.error);
+                this.$el.find(event.target).removeClass('success-input').addClass('error-input');
             }
-
         }
-
 
     });
 
