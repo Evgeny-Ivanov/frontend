@@ -85,16 +85,7 @@ define([
             console.log("message: "+message)
             event.target.setCustomValidity(message);//если передать сюда пустую строку
                                                     //браузер воспримет что ошибки нет
-
-            if (event.target.validity.valid) {
-                console.log("success");
-                this.renderModel.set(name, this.renderModel.success);
-                this.$el.find(event.target).removeClass('error-input').addClass('success-input');
-            } else {
-                console.log("error");
-                this.renderModel.set(name, this.renderModel.error);
-                this.$el.find(event.target).removeClass('success-input').addClass('error-input');
-            }
+            //устанавливаем тут ошибку - в main.css - псевдокласс который поменяет стили
         }
 
     });
