@@ -5,7 +5,8 @@ define([
 ){
 
 	var Model = Backbone.Model.extend({
-		url: "/api/v1/auth/signup",
+		urlRegistration: "/api/v1/auth/signup",
+		urlLogin: "/api/v1/auth/signin",
 		defaults: {
 			login: "",
 			email: "",
@@ -15,34 +16,54 @@ define([
 			passwordMessage: "",
 			emailMessage: ""
 		},
-		validate: function(){
+		validateRegistration: function(){
 			var answerEmail = this.checkEmail();
 			var answerLogin = this.checkLogin();
 			var answerPassword = this.checkPassword();
-			if(!answerEmail || !answerLogin || !answerPassword) return "error"; 
+			if(!answerEmail || !answerLogin || !answerPassword) validationError = "error"; 
+		},
+		validateLogin: function(){
+			var answerEmail = this.checkEmail();
+			var answerPassword = this.checkPassword();
+			if(!answerEmail || !answerPassword) validationError = "error";
 		},
 		registration: function(){
 			var self = this;
 			var setting = {
-	                type: "POST",
-	                url: self.url,
-	                dataType: 'json',
-	                data: self.toJSON(),
-	                error : self.errorRegistration,
-	                success : self.successRegistration
-	            };
+	            type: "POST",
+	            url: self.urlRegistration,
+	            dataType: 'json',
+	            data: self.toJSON(),
+	            error : self.errorSend,
+	            success : self.successSend
+		    };
 	        $.ajax(setting);
 		},
-		errorRegistration: function(xhr, status, error) {
+		login: function(){
+			var self = this;
+			var setting = {
+	            type: "POST",
+	            url: self.urlLogin,
+	            dataType: 'json',
+	            data: self.toJSON(),
+	            error : self.errorSend,
+	            success : self.successSend
+		    };
+	        $.ajax(setting);
+		},
+		errorSend: function(xhr, status, error) {
 	        alert(xhr.responseText + '|\n' + status + '|\n' +error);
+	        console.log(xhr.responseText + '|\n' + status + '|\n' +error);
 	        console.log("ajax error");
 	    },
-        successRegistration: function(answer){ 	
+        successSend: function(answer){ 	
             if(answer == "OK"){
                 console.log("ajax success");
                 this.isSuccess = true;
             }
             else{
+            	console.log("С сервера что-то пришло:");
+            	console.log(answer);
             	this.isSuccess = false;
             }
         },
@@ -52,7 +73,7 @@ define([
         		this.set("emailMessage","Email слишком короткий");
         		return false;
         	}
-    		console.log("success email");
+
 			this.set("emailMessage","");
 			return true;
         },

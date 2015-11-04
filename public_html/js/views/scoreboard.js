@@ -2,38 +2,27 @@ define([
     'backbone',
     'tmpl/scoreboard',
     'models/score',
-    'collections/scores'
+    'collections/scores',
+    'views/superView'
 ], function(
     Backbone,
     tmpl,
     scoreModel,
-    collectionsScores
+    collectionsScores,
+    superView
 ){
 
     var scoremodel = new scoreModel();
-    var View = Backbone.View.extend({
+    var View = superView.extend({
         id: "CollectionView",
         collection: collectionsScores,
         template: tmpl,
         events: {
             'click .back-in-main-menu': 'hide'
         },
-        initialize: function () {
-            this.render();
-            $(document.body).append(this.$el);
-            this.hide();
-        },
         render: function () {           
             this.$el.html(this.template(this.collection.toJSON()));
-        },
-        show: function () {
-            this.trigger("show");
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
         }
-
     });
 
     return new View({model: scoremodel});
