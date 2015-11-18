@@ -1,29 +1,28 @@
 
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="scores">
-    <div class = "row">
-        <div class="col-md-4" ></div>
+<!-- возможны ли блок блока и элемент элемента ? -->
+    <div class="col">
+        <div class="menu">
 
-        <div class="col-md-4 center">
-        	<h1>Scoreboard</h1>
-            <ul class='players'>
-            <fest:each iterate="scores" index="i" value="v">
-                <li> 
-                    <fest:value>v.name</fest:value>
+        <div class="menu__title menu__link_center"> Scoreboard </div>
+
+            <div class='menu__players'>
+            <fest:each iterate="scores" index="i" value="player">
+
+                <div  class="menu__players__player">
+                    <fest:value>player.name</fest:value>
                     <fest:space/>:<fest:space/>   
-                    <fest:value>v.score</fest:value> 
-                </li>
+                    <fest:value>player.score</fest:value> 
+                </div>
+
             </fest:each>
-            </ul>
+            </div>
+
+            <a href="#" class="menu__link_none"> 
+                <div class="menu__link menu__link_center"> Назад </div> 
+            </a>
+
         </div>
-
-        <div class="col-md-4"></div>
-
-    </div>
-
-    <div class="row">
-    	<div class="col-md-3"></div>
-    	<div class="col-md-1"><a href="#"><button type="button" class="btn btn-default back-in-main-menu">Назад</button></a></div>
-    	<div class="col-md-8"></div>
     </div>
 
 

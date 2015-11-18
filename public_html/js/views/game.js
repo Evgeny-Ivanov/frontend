@@ -1,32 +1,24 @@
 define([
     'backbone',
-    'tmpl/game'
+    'tmpl/game',
+    'views/superView',
+    'views/gameover'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    superView,
+    gameOverView
 ){
 
-    var View = Backbone.View.extend({
+    var View = superView.extend({
         id: "gameView",
         template: tmpl,
         events: {
+            "click .js-gameover": "gameOver"
         },
-        initialize: function () {
-            this.render();
-            $(document.body).append(this.$el);
-            this.hide();
-        },
-        render: function () {
-            this.$el.html(this.template());
-        },
-        show: function () {
-            this.trigger('show',this);
-            $(this.el).show();
-        },
-        hide: function () {
-            this.$el.hide();
+        gameOver: function(){
+           gameOverView.show();
         }
-
     });
 
     return new View();

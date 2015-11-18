@@ -5,7 +5,8 @@ define([
     'views/login',
     'views/scoreboard',
     'views/registration',
-    'views/viewManager'
+    'views/viewManager',
+    'views/gameover'
 
 ], function(
     Backbone,
@@ -14,15 +15,25 @@ define([
     loginView,
     scoreboardView,
     registrationView,
-    viewManager
+    viewManager,
+    gameOverView
 ){
 
+	// в canvas requestAnimationFrame нужно вызывать не для каждого шарика а для всего массива 
+	// почему ?
+	
+    viewManager.addArray([
+        mainView,
+        gameView,
+        loginView,
+        scoreboardView,
+        registrationView,
+        gameOverView
+    ]);
 
-    viewManager.add(mainView);
-    viewManager.add(gameView);
-    viewManager.add(loginView);
-    viewManager.add(scoreboardView);
-    viewManager.add(registrationView);
+    //ДЗ - написать свой Backbone.sync по RESTful
+    //с помощью ajax 
+
 
     var Router = Backbone.Router.extend({
         routes: {

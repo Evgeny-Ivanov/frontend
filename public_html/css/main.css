@@ -30,6 +30,7 @@ body {
 }
 
 
+
 .col{
 	margin-left: 35%;
 	margin-right: 35%;
@@ -37,38 +38,35 @@ body {
 }
 
 
-.main-menu{
-	text-decoration: none;
-}
-
-.main-menu_text-align-center{	
-	text-align: center;
-	position: relative;
-}
-
-.main-menu__title{
+.menu__title{
 	color: #405261;
 	font-size: 4em;
 }
 
-.main-menu__a{
+.menu__link{
 	line-height: 2em;
 	background-color: #4c6575;
 	color: #fafcff;
     margin-top: 0.8em;
     height: 2em;
     font-size: 1.9rem;
+    font-style: italic;
    /*border: 3px #CCCCCC solid;
    border-radius: 10px;*/
 
 }
 
-.main-menu__a:hover{
+.menu__link:hover{
     transform: scale(1.03);
 	background-color: #405261;
 	color: #FFFFFF;
 }
 
-.a_text-decoration_none{
+
+.menu__link_center{
+	text-align: center;
+}
+
+.menu__link_none{
 	text-decoration: none!important;
 }

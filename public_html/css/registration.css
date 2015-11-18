@@ -1,0 +1,45 @@
+.input-panel{
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+	background-color: #4c6575;
+	border-radius: 3px;
+}
+
+.data-submit{
+	
+	border:0px;
+	width:100%;
+}
+
+.input-panel_input{
+	position: relative;
+	margin-top: 0.4em;
+	left: 3%;
+	right: 3%;
+	line-height: 2em;
+	height: 2.2em;
+	width: 94%;
+	margin-bottom: 0.4em;
+	border-radius: 3px;
+	color: #4c6575;
+	text-indent: 4%;
+}
+
+.input-panel_input:-moz-placeholder {
+	color: #4c6575; 
+	opacity: 0.7;
+}
+
+.input-panel_input::-webkit-input-placeholder { 
+	text-indent: 4%;
+	color: #4c6575; 
+	opacity: 0.7;
+}
+
+ input:invalid{ 
+ 	color: #FF6672;
+ }
+
+ input:valid {
+ 	color: #69b241;
+ } 

@@ -1,36 +1,16 @@
 define([
     'backbone',
-    'tmpl/main'
+    'tmpl/main',
+    'views/superView'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    superView
 ){
 
-    var View = Backbone.View.extend({
+    var View = superView.extend({
         id: "mainView",
-        template: tmpl,
-        events: {
-        },
-        initialize: function () {
-            this.render();
-            $(document.body).append(this.$el);
-            this.hide();
-        },
-        render: function () {
-            this.$el.html(this.template());
-            return this;
-        },
-        show: function () {
-            this.trigger('show'); 
-            this.$el.show();
-        },
-        hide: function () {
-            this.$el.hide();
-            //наверно надо тут удалять обработчики
-            //при инициализации приложения все обработчики из всех вьюшек начинают работать 
-        }
-
-
+        template: tmpl
     });
 
     return new View();
