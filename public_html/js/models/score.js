@@ -28,6 +28,12 @@ define([
                 model.trigger('sync', model, resp, options);
             };
             return this.sync('read', this, options);
+        },
+        save: function(options){
+
+        },
+        destroy: function(options){
+            
         }
 
     });

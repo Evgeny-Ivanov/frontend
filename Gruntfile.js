@@ -46,40 +46,45 @@ module.exports = function (grunt) {
                 options: {
                     livereload: true
                 }
+            },
+            sass: {
+                files: [
+                    'public_html/sass/**/*.scss'
+                ],
+                tasks: ['sass'],
+                options: {
+                    livereload: true
+                }
+            }
+        },
+        sass: {
+            dist: {
+                /*files: [{
+                    expand: true,
+                    cwd: 'public_html/sass', // исходная директория 
+                    src: ['*.scss'], // имена шаблонов 
+                    dest: 'public_html/css', // результирующая директория 
+                    ext:  '.css'
+                }]*/
+                files: {
+                    'public_html/css/head.css': 'public_html/sass/head.scss'
+                }
             }
         },
         concurrent: {
-            target: [ 'watch','shell'],
+            target: [ 'watch','shell','sass'],
             options: {
-
                 logConcurrentOutput: true /* Вывод процесса */
             }
-        },
-
-        // настройка jshint для валидации JS-файлов
-        jshint: {
-            options: {
-                reporter: require('jshint-stylish') // используйте jshint-stylish для наглядного представления ошибок
-            },
-
-            // при запуске этой задачи анализируется файл Gruntfile.js и все JS-файлы в src
-            build: [
-                'Gruntfile.js', 
-                'public_html/js/*.js',
-                'public_html/js/views/*.js',
-                'public_html/js/collections/*.js',
-                'public_html/js/models/*.js'
-            ]
-
         }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-fest');
-
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-sass');
 
 
     grunt.registerTask('default', ['concurrent']);
