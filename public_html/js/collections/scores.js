@@ -8,28 +8,52 @@ define([
 
     var Collection = Backbone.Collection.extend({
     	model: scoreModel,
-        url: '/scoreboard'
-    	//компаратор применяется что бы постоянно поддерживать коллекцию в отсортированном состоянии
+        url: '/api/v1/scores',
+        limit: 10,
+        comparator: function(model) {
+            return -model.get('score');
+        },
+        fetch: function(options){
+            //получаем коллекцию моделей с сервера
+        var self = this;
+        
+        options.success = function(resp) {
+
+            var method = options.reset ? 'reset' : 'set';
+            self[method](resp, options);
+
+
+            _.each(resp,function(model){
+
+                var model = new scoreModel(model);
+
+                self.set(model);
+                self.set({name:"asdas",score:"10"});
+
+                console.log(self);
+            });
+
+            self.trigger('sync', self, resp, options);
+        };
+
+        options.error = function(resp) {
+            self.trigger('error', self, resp, options);
+        };
+
+        return this.sync('read', this, options);
+
+        },
+        create: function(options){
+            //Удобное создание модели внутри коллекции. 
+        }
     });
 
-    //java-сервер ajax-ом должен сюда прислать 10 лучших пользователей
+    var collections = new Collection();
 
-    var collections = new Collection([
-        {name: "Тим", score: 5},
-        {name: "Ида", score: 26},
-        {name: "Роб", score: 55}
-    ]);
-    //collections.fetch({update: true, remove: false});
-
-    //collections.fetch();
-
-    collections = collections.sortBy(function(model) {
-        return -model.get('score');
-    });//collections - теперь просто массив 
-
-    collections = collections.slice(0,10);//не выдает ошибки если нет 10 элементов
-
-    collections = new Collection(collections);
+    var options = {
+        reset: "set",
+    }
+    collections.fetch(options);
 
     return collections;
 

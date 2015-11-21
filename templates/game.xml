@@ -4,9 +4,8 @@
         <h1>My Super Game</h1>
     </div>
 
-    <div class="col-game-left">
-        <a href="#"><button type="button" class="btn btn-default back-in-main-menu">Назад</button></a>
-	    <button type="button" class="btn btn-default js-gameover">Закончить игру</button>
+    <div class="game">
+
     </div>	
 
 
