@@ -1,5 +1,4 @@
 @charset "UTF-8";
-/*#69b241*/
 body {
   background-color: #FF6672; }
 
@@ -60,12 +59,12 @@ body {
   .input-panel_input {
     position: relative;
     margin-top: 0.4em;
+    margin-bottom: 0.4em;
     left: 3%;
     right: 3%;
     line-height: 2em;
     height: 2.2em;
     width: 94%;
-    margin-bottom: 0.4em;
     border-radius: 3px;
     color: #4c6575;
     text-indent: 4%; }

@@ -4,20 +4,24 @@
 }
 
 .input-panel{
-	padding-top: 0.3em;
-	padding-bottom: 0.3em;
+	padding: {
+		top: 0.3em;
+		bottom: 0.3em;
+	}
 	background-color: $grey;
 	border-radius: 3px;
 
 	&_input{
 		position: relative;
-		margin-top: 0.4em;
+		margin: {
+			top: 0.4em;
+			bottom: 0.4em;
+		}
 		left: 3%;
 		right: 3%;
 		line-height: 2em;
 		height: 2.2em;
 		width: 94%;
-		margin-bottom: 0.4em;
 		border-radius: 3px;
 		color: $grey;
 		text-indent: 4%;

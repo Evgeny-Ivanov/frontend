@@ -1,9 +1,11 @@
 define([
     'backbone',
-    'helpers/sync'
+    'helpers/sync',
+    'helpers/storage'
 ], function(
     Backbone,
-    customSync
+    customSync,
+    storage
 ){
 
     var Model = Backbone.Model.extend({
@@ -16,27 +18,131 @@ define([
     		name: 'An unnamed cell',
     		score: 0
     	},
-        fetch: function(options) {
-            options = options ? _.clone(options) : {};//если не передали параметры присваиваем пустому объкту
-            if (options.parse === void 0) options.parse = true;
-            var model = this;
-            options.success = function(resp) {
-                if (!model.set(model.parse(resp, options), options)) return false;
-                //model.parse должна возвратить хэш атрибутов, который будет передан методу set.
-                //Реализация по умолчанию просто пробрасывает JSON-ответ
-                if (success) success(model, resp, options);
-                model.trigger('sync', model, resp, options);
+        fetch: function() {
+          //GET /scores/:id
+            var method = "read";
+            var data = {id: this.id};
+            var self = this;
+            var options = {
+                url: this.url,
+                data: JSON.stringify(data),
+                success: function(data,textStatus,xhr) {
+                    var status = xhr.status;
+                    data = JSON.parse(data);
+
+                    if(status == 200){
+                        self.set(data);
+                    };
+                },
+                error: function(xhr,textStatus,errorMessage) {
+                    var status = xhr.status;
+                    if(status == 404){
+
+                    }
+                    if(status == 400){
+
+                    }
+                }
             };
-            return this.sync('read', this, options);
+
+            this.sync(method, this, options);
         },
-        save: function(options){
+        save: function(){
+            // POST /scores
+            var method = "create";
+            var data = this.toJSON();
+            var self = this;
+            var options = {
+                url: this.url,
+                data: data,
+                success: function(data,textStatus,xhr) {
+                    var status = xhr.status;
+                    data = JSON.parse(data);
+
+                    if(status == 200){
+                        self.id = data.id;
+                    };
+                },
+                error: function(xhr,textStatus,errorMessage) {
+                    var status = xhr.status;
+                    if(status == 400){
+                        return;
+                    }
+                    storage.put(method,options);
+                }
+            };
+
+            this.sync(method, this, options);
+        },
+        destroy: function(){
+           // DELETE /scores/:id
+            var method = "delete";
+            var data = {id: this.id};
+            var self = this;
+            var options = {
+                url: this.url,
+                data: data,
+                success: function(data,textStatus,xhr) {
+                    var status = xhr.status;
+                    data = JSON.parse(data);
+
+                    if(status == 200){
+                        
+                    };
+                },
+                error: function(xhr,textStatus,errorMessage) {
+                    var status = xhr.status;
+                    if(status == 400){
+                        return;
+                    }
+                    if(status == 404){
+                        return;
+                    }
+                    storage.put(method,options);
+                }
+            };
+
+            this.sync(method, this, options);
 
         },
-        destroy: function(options){
-            
+        update: function(){//????????????????????
+            //PUT /scores/:id
+            var method = "update";
+            var data = this.toJSON();
+            var self = this;
+            var options = {
+                url: this.url,
+                data: data,
+                success: function(data,textStatus,xhr) {
+                    var status = xhr.status;
+                    data = JSON.parse(data);
+                    if(status == 200){
+                        
+                    };
+                },
+                error: function(xhr,textStatus,errorMessage) {
+                    var status = xhr.status;
+                    if(status == 400){
+                        return;
+                    }
+                    if(status == 404){
+                        return;
+                    }
+                    storage.put(method,options);
+                }
+            };
+
+            this.sync(method, this, options);
+
         }
 
     });
 
+    var buf = new Model({
+            name: "evgen",
+            score: 10
+        });
+    storage.clearAll();
+    buf.save();
     return Model;
 });
