@@ -4,7 +4,7 @@
         <h1>My Super Game</h1>
     </div>
 
-    <div class="game">
+    <div class="game js-gameover">
 
     </div>	
 

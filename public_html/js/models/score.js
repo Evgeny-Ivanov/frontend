@@ -12,7 +12,7 @@ define([
         sync: customSync,
     	initialize: function(){
     	},
-        url: '/scoreboard',
+        url: '/api/v1/scores',
         idAttribute: 'id_event',
     	defaults: {
     		name: 'An unnamed cell',
@@ -33,6 +33,7 @@ define([
                     if(status == 200){
                         self.set(data);
                     };
+                    self.trigger('sync');
                 },
                 error: function(xhr,textStatus,errorMessage) {
                     var status = xhr.status;
@@ -42,6 +43,7 @@ define([
                     if(status == 400){
 
                     }
+                    self.trigger('error');
                 }
             };
 
@@ -58,17 +60,20 @@ define([
                 success: function(data,textStatus,xhr) {
                     var status = xhr.status;
                     data = JSON.parse(data);
-
+                    console.log("success model score");
                     if(status == 200){
                         self.id = data.id;
                     };
+                    self.trigger('sync');
                 },
                 error: function(xhr,textStatus,errorMessage) {
                     var status = xhr.status;
                     if(status == 400){
                         return;
                     }
+                    console.log("error model score");
                     storage.put(method,options);
+                    self.trigger('error');
                 }
             };
 
@@ -89,6 +94,7 @@ define([
                     if(status == 200){
                         
                     };
+                    self.trigger('sync');
                 },
                 error: function(xhr,textStatus,errorMessage) {
                     var status = xhr.status;
@@ -99,6 +105,7 @@ define([
                         return;
                     }
                     storage.put(method,options);
+                    self.trigger('error');
                 }
             };
 
@@ -119,6 +126,7 @@ define([
                     if(status == 200){
                         
                     };
+                    self.trigger('sync');
                 },
                 error: function(xhr,textStatus,errorMessage) {
                     var status = xhr.status;
@@ -129,6 +137,7 @@ define([
                         return;
                     }
                     storage.put(method,options);
+                    self.trigger('error');
                 }
             };
 
@@ -142,7 +151,6 @@ define([
             name: "evgen",
             score: 10
         });
-    storage.clearAll();
-    buf.save();
+    //buf.save();
     return Model;
 });

@@ -40,6 +40,8 @@ define([
                 },
                 error: function(xhr,textStatus,errorMessage) {
                     var status = xhr.status;
+                    console.log("error send scores: ",method,options);
+                    storage.put(method,options);
                     self.trigger('error'); 
                 }
             }
