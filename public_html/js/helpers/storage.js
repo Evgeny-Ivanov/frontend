@@ -5,10 +5,12 @@ define([
 ){
 	var storage = {
 		prefix: 'queue-',
-		count: function(){
-			var countItem = localStorage.getItem("count");
-			if(!countItem) return 0;
-			return countItem;
+		isEmpty: function(){
+			var lengthSet = 0;
+			this.forEach(function(key){
+				lengthSet++;
+			});
+			return lengthSet;
 		},
 		put: function(method,options,key){//sync = function(method,model,options){
 			var item = {
@@ -18,10 +20,9 @@ define([
 
 			item = JSON.stringify(item);
 			if(!key){
-				var count = this.count();
-				localStorage.setItem(this.prefix + count,item);
-				count++;
-				localStorage.setItem("count",count);
+				var name = this.prefix + options.data.name;
+				localStorage.setItem(name,item);
+				this.count++;
 			}
 			else{
 				localStorage.setItem(key,item);
@@ -29,33 +30,42 @@ define([
 
 		},
 		clearAll: function(){
-			var count = this.count();
-			console.log(count);
-			for(i = 0;i<count;i++){
-				localStorage.removeItem(this.prefix + i);
-			}
-			localStorage.setItem("count",0);
+			var self = this;
+			this.forEach(function(key){
+				localStorage.removeItem(key);
+			});
 		},
 		clear: function(name){
 			localStorage.removeItem(name);
-			count--;
-			localStorage.setItem("count",count);
 		},
 		send: function(){
-			var count = this.count();
-			for(i = 0;i<count;i++){
-				var data = localStorage.getItem(this.prefix + i);
+			var self = this;
+			this.forEach(function(key){
+				var data = localStorage.getItem(key);
 				data = JSON.parse(data);
 				var method = data.method;
 				var options = data.options;
 
 				var model = null;//костыль
-				sync(method,model,options); 
-
-				this.clear(this.prefix + i);//удаляем , затем если в верхмем методе будет ошибка модель опять запишет в localstorage
-			}
+				options.success = function(data,textStatus,xhr){
+					console.log("localStorage success send");
+					self.clear(key);
+				}
+				options.error = function(xhr,textStatus,errorMessage){
+					console.log("localStorage error send");
+				}
+				sync(method,model,options);
+			});
 		},
-
+		forEach: function(func){
+			for(i=0;i<localStorage.length;i++){
+				var key = localStorage.key(i);
+				var prefix = key.split("-")[0]+'-';
+				if(prefix == this.prefix ){
+					func(key);
+				}
+			}
+		}
 	};
 
 

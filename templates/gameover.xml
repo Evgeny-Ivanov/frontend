@@ -3,7 +3,7 @@
     <div class="col">
         <div class="menu">
 
-        <div class="menu__title menu__link_center"> Game Over </div>
+	        <div class="menu__title menu__link_center"> Game Over </div>
 
 			<form class="js-ajax-send-score" role="form" metod = "POST">
 
@@ -25,8 +25,13 @@
 
 				<button type="submit" class="data-submit menu__link">Сохранить</button> 	
 
+
+
 			</form>  
 
+	        <a href="#" class="menu__link_none"> 
+	        	<div class="menu__link menu__link_center"> Отложить отправку  </div> 
+	        </a>
         </div>
     </div>
 

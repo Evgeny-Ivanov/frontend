@@ -6,7 +6,9 @@ define([
     'views/scoreboard',
     'views/registration',
     'views/viewManager',
-    'views/gameover'
+    'views/gameover',
+    'views/loading',
+    'views/errorScoreboard'
 
 ], function(
     Backbone,
@@ -16,7 +18,9 @@ define([
     scoreboardView,
     registrationView,
     viewManager,
-    gameOverView
+    gameOverView,
+    loadingView,
+    errorScoreboardView
 ){
 
 	// в canvas requestAnimationFrame нужно вызывать не для каждого шарика а для всего массива 
@@ -28,7 +32,9 @@ define([
         loginView,
         scoreboardView,
         registrationView,
-        gameOverView
+        gameOverView,
+        loadingView,
+        errorScoreboardView
     ]);
 
     //ДЗ - написать свой Backbone.sync по RESTful

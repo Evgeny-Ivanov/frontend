@@ -4,14 +4,18 @@ define([
     'models/score',
     'collections/scores',
     'views/superView',
-    'helpers/storage'
+    'helpers/storage',
+    'views/loading',
+    'views/errorScoreboard'
 ], function(
     Backbone,
     tmpl,
     scoreModel,
     scores,
     superView,
-    storage
+    storage,
+    loadingView,
+    errorView
 ){
 
     var View = superView.extend({
@@ -28,23 +32,35 @@ define([
             //почему то эта штука в initialize не работает
             this.listenTo(this.collection,"sync",this.showSuccess);
             this.listenTo(this.collection,"error",this.showError);
+            if(storage.isEmpty()){
+                storage.send();
+            }
 
-            this.trigger("show");
             this.showLoading();
 
             this.collection.fetch(5);
         },
         showSuccess: function(){
-            this.trigger("show");
-            console.log("fsdasd");
-            this.render();
-            this.$el.show();
+            var self = this;
+            window.setTimeout(
+                function(){
+                    self.trigger("show");
+                    self.render();
+                    self.$el.show();
+                },
+                1000
+            );
         },
         showError: function(){
-            //нужно запилить и тут отобразить вьюшку ошибки
+            window.setTimeout(
+                function(){
+                    errorView.show();
+                },
+                1000
+            );
         },
         showLoading: function(){
-            //нужно запилить и тут отобразить вьюшку загрузки
+            loadingView.show();
         },
         hide: function(){
             this.$el.hide();
